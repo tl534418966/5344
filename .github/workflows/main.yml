@@ -22,18 +22,17 @@ jobs:
           sudo apt update
           sudo apt install -y zip unzip openjdk-17-jdk autoconf libtool pkg-config wget
 
-      - name: Download unpack cmdline‑tools
+      - name: Download old‑version cmdline‑tools(has tools folder)
         run: |
           mkdir -p ~/dl
           cd ~/dl
-          wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-          unzip -q commandlinetools-linux-9477386_latest.zip
-          mkdir -p ~/android-sdk/cmdline-tools
-          mv ./cmdline-tools ~/android-sdk/cmdline-tools/latest
+          wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
+          unzip -q sdk-tools-linux-4333796.zip
+          mkdir -p ~/android-sdk
+          mv ./tools ~/android-sdk/
           rm -rf ~/dl
-          ls -la ~/android-sdk/cmdline-tools/latest/bin
+          ls ~/android-sdk/tools/bin
 
-      # 手动生成许可文件，绕过交互式y/n确认
       - name: Pre‑create android SDK license
         run: |
           mkdir -p ~/android-sdk/licenses
@@ -42,7 +41,7 @@ jobs:
 
       - name: Install SDK packages
         run: |
-          ~/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root="$HOME/android-sdk" "build-tools;34.0.0" "platforms;android-33"
+          ~/android-sdk/tools/bin/sdkmanager --sdk_root="$HOME/android-sdk" "build-tools;34.0.0" "platforms;android-33"
 
       - name: Copy SDK to buildozer folder
         run: |
