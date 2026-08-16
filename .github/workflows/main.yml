@@ -10,29 +10,43 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Python 3.11
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
-      - name: Install system dependencies
+      - name: 安装系统依赖库
         run: |
-          sudo apt update
-          sudo apt install -y zip unzip openjdk-17-jdk autoconf libtool pkg-config
+name
+on
 
-      - name: Install python packages
-        run: |
-          python -m pip install --upgrade pip
-          pip install buildozer
+      - push: branches
+main: |
+jobs
+steps
+name
+Checkout source code
+uses
+name
+Setup Python 3.11
 
-      - name: Build debug APK
-        run: buildozer android debug
+      - uses: with
+name: |
+run
+sudo apt update
 
-      - name: Upload generated APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: output-apk
-          path: bin/*.apk
+      - name: defaults
+description: |
+run
+mkdir -p ~/android-sdk/cmdline-tools
 
+      - permissions: unzip commandlinetools-linux-9477386_latest.zip
+Concurrency ensures that only a single job or workflow using the same concurrency group will run at a time. A concurrency group can be any string or expression.: You can also specify
+
+      - echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV: Documentation
+Concurrency ensures that only a single job or workflow using the same concurrency group will run at a time. A concurrency group can be any string or expression.: actions/upload-artifact@v4
+安装build‑tools;37.0.0 和安卓平台SDK:
+at the job level.Concurrency ensures that only a single job or workflow using the same concurrency group will run at a time. A concurrency group can be any string or expression.output-apk
+run: bin/*.apk
