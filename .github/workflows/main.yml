@@ -29,18 +29,18 @@ jobs:
           mkdir -p ~/android-sdk/cmdline-tools
           cd ~/android-sdk/cmdline-tools
           wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-          unzip commandlinetools-linux-9477386_latest.zip
+          unzip -q commandlinetools-linux-9477386_latest.zip
           mv cmdline-tools latest
+          ls -la ~/android-sdk/cmdline-tools/latest/bin
 
-      - name: Install SDK build‑tools 37.0.0
+      - name: Install SDK components
         run: |
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "build-tools;37.0.0" "platforms;android-33"
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root="$ANDROID_SDK_ROOT" "build-tools;37.0.0" "platforms;android-33"
 
-      # 关键修复：把装好的SDK复制到buildozer硬编码的默认路径
       - name: Copy SDK to buildozer expected folder
         run: |
           mkdir -p ~/.buildozer/android/platform/
-          cp -r $ANDROID_SDK_ROOT ~/.buildozer/android/platform/android-sdk
+          cp -r "$ANDROID_SDK_ROOT" ~/.buildozer/android/platform/android-sdk
 
       - name: Install buildozer
         run: |
