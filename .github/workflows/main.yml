@@ -7,9 +7,7 @@ on:
 
 jobs:
   build_apk:
-    runs-on: ubuntu‑latest
-    env:
-      ANDROID_SDK_ROOT: $HOME/android-sdk
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
         uses: actions/checkout@v5
@@ -17,31 +15,18 @@ jobs:
       - name: Setup Python 3.11
         uses: actions/setup-python@v6
         with:
-          python‑version: '3.11'
+          python-version: '3.11'
 
-      - name: Install system libs
+      - name: Install system packages
         run: |
           sudo apt update
-          sudo apt install -y zip unzip openjdk‑17‑jdk autoconf libtool pkg‑config wget
+          sudo apt install -y zip unzip autoconf libtool pkg-config
 
-      - name: Download and setup cmdline‑tools
-        run: |
-          mkdir -p ~/android-sdk
-          cd ~/android-sdk
-          wget https://dl.google.com/android/repository/commandlinetools-linux‑11076708_latest.zip
-          unzip commandlinetools-linux‑11076708_latest.zip
-          mkdir -p cmdline‑tools
-          mv cmdline‑tools cmdline‑tools/latest
-
-      - name: Install SDK packages
-        run: |
-          ls $ANDROID_SDK_ROOT/cmdline‑tools/latest/bin
-          $ANDROID_SDK_ROOT/cmdline‑tools/latest/bin/sdkmanager --sdk_root="$ANDROID_SDK_ROOT" "build‑tools;34.0.0" "platforms;android‑33"
-
-      - name: Copy SDK folder
-        run: |
-          mkdir -p ~/.buildozer/android/platform/
-          cp -r "$ANDROID_SDK_ROOT" ~/.buildozer/android/platform/android‑sdk
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-levels: 33
+          build-tools: 34.0.0
 
       - name: Install buildozer
         run: |
@@ -51,8 +36,8 @@ jobs:
       - name: Build debug APK
         run: buildozer android debug
 
-      - name: Upload APK
-        uses: actions/upload‑artifact@v4
+      - name: Upload generated APK
+        uses: actions/upload-artifact@v4
         with:
-          name: output‑apk
+          name: output-apk
           path: bin/*.apk
