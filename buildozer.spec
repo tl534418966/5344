@@ -1,5 +1,6 @@
 [app]
 version = 1.0
+title = 图片拼图工具
 package.name = imgmerge
 package.domain = org.imgmerge
 source.dir = .
