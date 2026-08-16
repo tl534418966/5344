@@ -8,6 +8,8 @@ on:
 jobs:
   build_apk:
     runs-on: ubuntu-latest
+    env:
+      ANDROID_SDK_ROOT: $HOME/android-sdk
     steps:
       - name: Checkout source code
         uses: actions/checkout@v5
@@ -17,16 +19,28 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install system packages
+      - name: Install system libs
         run: |
           sudo apt update
-          sudo apt install -y zip unzip autoconf libtool pkg-config
+          sudo apt install -y zip unzip openjdk-17-jdk autoconf libtool pkg-config wget
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          api-levels: 33
-          build-tools: 34.0.0
+      - name: Download command‑line tools
+        run: |
+          mkdir -p ~/android-sdk/cmdline-tools
+          cd ~/android-sdk/cmdline-tools
+          wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+          unzip -q commandlinetools-linux-9477386_latest.zip
+          mv cmdline-tools latest
+
+      # 关键：--accept‑licenses 自动全部同意SDK许可，不再等待手动输入y
+      - name: Install SDK accept license auto
+        run: |
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root="$ANDROID_SDK_ROOT" --accept-licenses "build-tools;34.0.0" "platforms;android-33"
+
+      - name: Copy SDK to buildozer expected path
+        run: |
+          mkdir -p ~/.buildozer/android/platform/
+          cp -r "$ANDROID_SDK_ROOT" ~/.buildozer/android/platform/android-sdk
 
       - name: Install buildozer
         run: |
